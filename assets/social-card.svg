@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Avalonia Conf Online 2026">
+  <defs>
+    <radialGradient id="auroraA" cx="0.8" cy="0" r="0.9">
+      <stop offset="0" stop-color="#2be4c6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#2be4c6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="auroraB" cx="0.15" cy="0.05" r="0.8">
+      <stop offset="0" stop-color="#007df9" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#007df9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#007df9" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#007df9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#04070f"/>
+  <rect width="1200" height="630" fill="url(#auroraA)"/>
+  <rect width="1200" height="630" fill="url(#auroraB)"/>
+
+  <!-- star speckle -->
+  <g fill="#eaf2ff">
+    <circle cx="120" cy="80" r="1.6" opacity="0.7"/>
+    <circle cx="320" cy="52" r="1.2" opacity="0.5"/>
+    <circle cx="540" cy="110" r="1.4" opacity="0.6"/>
+    <circle cx="860" cy="60" r="1.3" opacity="0.5"/>
+    <circle cx="1080" cy="140" r="1.6" opacity="0.7"/>
+    <circle cx="1150" cy="330" r="1.2" opacity="0.5"/>
+    <circle cx="220" cy="520" r="1.3" opacity="0.5"/>
+    <circle cx="640" cy="560" r="1.5" opacity="0.6"/>
+    <circle cx="70" cy="330" r="1.2" opacity="0.5"/>
+    <circle cx="420" cy="470" r="1.2" opacity="0.4"/>
+  </g>
+
+  <path d="M0 612h1200" stroke="#007df9" stroke-width="12"/>
+
+  <!-- Mark: dotted orbit + people connecting + Avalonia teardrop -->
+  <circle cx="920" cy="300" r="205" fill="url(#glow)"/>
+  <g transform="translate(664 44) scale(0.5)">
+    <circle cx="512" cy="512" r="420" fill="none" stroke="#007df9" stroke-width="28" stroke-linecap="round"
+      pathLength="360" stroke-dasharray="44 24 35 16 30 24 35 16 50 24 38 24" stroke-dashoffset="-14"/>
+    <g fill="#007df9">
+      <circle cx="925.6" cy="585" r="18"/>
+      <circle cx="271.2" cy="856" r="18"/>
+      <circle cx="242" cy="190.2" r="18"/>
+    </g>
+    <g transform="translate(722 148.2)">
+      <circle r="80" fill="#007df9"/>
+      <circle cx="0" cy="-22" r="25" fill="#eaf2ff"/>
+      <path d="M-42 52c0-30 19-50 42-50s42 20 42 50v4h-84v-4Z" fill="#eaf2ff"/>
+    </g>
+    <g transform="translate(93.6 548.6)">
+      <circle r="80" fill="#007df9"/>
+      <circle cx="0" cy="-22" r="25" fill="#eaf2ff"/>
+      <path d="M-42 52c0-30 19-50 42-50s42 20 42 50v4h-84v-4Z" fill="#eaf2ff"/>
+    </g>
+    <g transform="translate(655.6 906.6)">
+      <circle r="80" fill="#007df9"/>
+      <circle cx="0" cy="-22" r="25" fill="#eaf2ff"/>
+      <path d="M-42 52c0-30 19-50 42-50s42 20 42 50v4h-84v-4Z" fill="#eaf2ff"/>
+    </g>
+    <g transform="translate(-307 -307) scale(11.375)">
+      <path fill="#007df9" d="M72 48C85.2548 48 96 58.7452 96 72V90C96 93.3137 93.3137 96 90 96H72C58.7452 96 48 85.2548 48 72C48 58.7452 58.7452 48 72 48ZM72 55C64.3489 55 57.8783 60.0545 55.745 67.0065C58.3931 67.1342 60.5 69.321 60.5 72C60.5 74.6793 58.3926 76.8664 55.745 76.9941C57.8352 83.8054 64.0901 88.7958 71.5395 88.9939C74.6226 88.9252 77.1092 88.2605 79 87V89H89V72C89 62.827 81.7348 55.3509 72.6446 55.012L72.323 55.003L72 55ZM72 64C76.4183 64 80 67.5817 80 72C80 76.4183 76.4183 80 72 80C67.5817 80 64 76.4183 64 72C64 67.5817 67.5817 64 72 64ZM55.5 68.5C53.567 68.5 52 70.067 52 72C52 73.933 53.567 75.5 55.5 75.5C57.433 75.5 59 73.933 59 72C59 70.067 57.433 68.5 55.5 68.5Z"/>
+    </g>
+  </g>
+
+  <text x="72" y="240" fill="#eaf2ff" font-family="ui-rounded, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="88" font-weight="800">Avalonia Conf</text>
+  <text x="76" y="318" fill="#9fb2d6" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="36" font-weight="650">Online · Free · 02 Dec 2026</text>
+  <text x="76" y="368" fill="#9fb2d6" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="30" font-weight="650">09:00–17:00 CET</text>
+  <text x="76" y="458" fill="#2be4c6" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="36" font-weight="800">Call for Papers is open</text>
+</svg>

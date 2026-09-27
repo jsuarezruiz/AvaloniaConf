@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Avalonia Conf">
+  <!-- Dotted orbit: gaps land on the people nodes and small dots -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round"
+    pathLength="360" stroke-dasharray="44 24 35 16 30 24 35 16 50 24 38 24" stroke-dashoffset="-14"/>
+
+  <!-- Small orbit dots -->
+  <g fill="#FFFFFF">
+    <circle cx="462.8" cy="292.5" r="9"/>
+    <circle cx="135.6" cy="428" r="9"/>
+    <circle cx="121" cy="95.1" r="9"/>
+  </g>
+
+  <!-- People connecting on the ring -->
+  <g>
+    <g transform="translate(361 74.1)">
+      <circle r="40" fill="#FFFFFF"/>
+      <circle cx="0" cy="-11" r="12.5" fill="#05070F"/>
+      <path d="M-21 26c0-15 9.5-25 21-25s21 10 21 25v2h-42v-2Z" fill="#05070F"/>
+    </g>
+    <g transform="translate(46.8 274.3)">
+      <circle r="40" fill="#FFFFFF"/>
+      <circle cx="0" cy="-11" r="12.5" fill="#05070F"/>
+      <path d="M-21 26c0-15 9.5-25 21-25s21 10 21 25v2h-42v-2Z" fill="#05070F"/>
+    </g>
+    <g transform="translate(327.8 453.3)">
+      <circle r="40" fill="#FFFFFF"/>
+      <circle cx="0" cy="-11" r="12.5" fill="#05070F"/>
+      <path d="M-21 26c0-15 9.5-25 21-25s21 10 21 25v2h-42v-2Z" fill="#05070F"/>
+    </g>
+  </g>
+
+  <!-- Official Avalonia mark -->
+  <g transform="translate(-153.5 -153.5) scale(5.6875)">
+    <path fill="#FFFFFF" d="M72 48C85.2548 48 96 58.7452 96 72V90C96 93.3137 93.3137 96 90 96H72C58.7452 96 48 85.2548 48 72C48 58.7452 58.7452 48 72 48ZM72 55C64.3489 55 57.8783 60.0545 55.745 67.0065C58.3931 67.1342 60.5 69.321 60.5 72C60.5 74.6793 58.3926 76.8664 55.745 76.9941C57.8352 83.8054 64.0901 88.7958 71.5395 88.9939C74.6226 88.9252 77.1092 88.2605 79 87V89H89V72C89 62.827 81.7348 55.3509 72.6446 55.012L72.323 55.003L72 55ZM72 64C76.4183 64 80 67.5817 80 72C80 76.4183 76.4183 80 72 80C67.5817 80 64 76.4183 64 72C64 67.5817 67.5817 64 72 64ZM55.5 68.5C53.567 68.5 52 70.067 52 72C52 73.933 53.567 75.5 55.5 75.5C57.433 75.5 59 73.933 59 72C59 70.067 57.433 68.5 55.5 68.5Z"/>
+  </g>
+</svg>

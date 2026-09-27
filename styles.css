@@ -1,0 +1,1723 @@
+/* ==========================================================================
+   Avalonia Conf Online 2026 — "The Isle of Avalonia"
+   Static-first: the page reads fully without JS/WebGL. The 3D world and the
+   reveals are progressive enhancement layered behind the DOM, never over it.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("assets/fonts/unbounded-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("assets/fonts/unbounded-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  --bg: #04070f;
+  --ink: #eaf2ff;
+  --muted: #9fb2d6;
+  --faint: #6d7ea9;
+  --brand: #007df9;
+  --brand-soft: #4aa8ff;
+  --aurora: #2be4c6;
+  --ember: #ffb454;
+  --line: rgba(159, 209, 255, 0.14);
+  /* Deliberately unblurred: backdrop-filter over a canvas that changes every
+     frame forces a re-blur of every card per frame. Opacity does the job. */
+  --glass: rgba(8, 14, 28, 0.84);
+  --glass-strong: rgba(8, 14, 28, 0.78);
+  --chip-bg: rgba(10, 17, 34, 0.45);
+  --ghost-bg: rgba(10, 17, 34, 0.4);
+  --unit-bg: rgba(4, 7, 15, 0.45);
+  --footer-bg: rgba(4, 7, 15, 0.72);
+  --overlay-bg: rgba(4, 7, 15, 0.94);
+  --card-solid: rgba(5, 9, 19, 0.93);
+  --scrim-rgb: 4, 7, 15;
+  --vignette: rgba(2, 4, 10, 0.5);
+  --grain-opacity: 0.05;
+  --button-bg: #007df9;
+  --display-fill: linear-gradient(105deg, #ffffff 30%, #9fd1ff 72%, #2be4c6 105%);
+  --display-glow: rgba(0, 125, 249, 0.35);
+  --outline-fill: linear-gradient(180deg, rgba(159, 209, 255, 0.46), rgba(122, 165, 214, 0.12));
+  /* Composed poster: aurora band, portal glow, moon — visible before/without WebGL. */
+  --poster:
+    radial-gradient(58rem 30rem at 78% -6%, rgba(43, 228, 198, 0.14), transparent 62%),
+    radial-gradient(46rem 26rem at 18% 4%, rgba(0, 125, 249, 0.17), transparent 64%),
+    radial-gradient(7rem 7rem at 84% 12%, rgba(234, 242, 255, 0.16), transparent 70%),
+    radial-gradient(64rem 44rem at 50% 118%, rgba(0, 125, 249, 0.12), transparent 66%);
+  --mark-dark-display: block;
+  --mark-light-display: none;
+  --icon-sun-display: block;
+  --icon-moon-display: none;
+
+  --font-display: "Unbounded", ui-sans-serif, system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Type scale (1.333 ratio, display steps fluid) */
+  --t-display: clamp(1.9rem, 12vw, 8.75rem);
+  --t-h2: clamp(1.6rem, 1.05rem + 2.1vw, 2.8rem);
+  --t-h3: 1rem;
+  --t-lead: clamp(1.02rem, 0.95rem + 0.3vw, 1.15rem);
+  --t-body: 1rem;
+  --t-small: 0.875rem;
+  --t-eyebrow: 0.72rem;
+  /* Floor for mono labels (units, tags, rail numbers): never below ~11px. */
+  --t-label: 0.7rem;
+
+  --wrap: 1180px;
+  --pad: clamp(1.25rem, 4vw, 2.5rem);
+  --radius: 18px;
+  --speed: 240ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.21, 1);
+
+  color-scheme: dark;
+}
+
+/* Light theme ("winter daylight"): follows the system unless the visitor has
+   picked dark, or applies when they picked light. The two blocks are the same
+   token set; CSS cannot share one block between a media query and a selector. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef3fa;
+    --ink: #0f1b2e;
+    --muted: #3a4f72;
+    --faint: #56698c;
+    --brand-soft: #0a62c4;
+    --aurora: #087a68;
+    --ember: #a95a00;
+    --line: rgba(20, 50, 100, 0.14);
+    --glass: rgba(255, 255, 255, 0.86);
+    --glass-strong: rgba(250, 252, 255, 0.82);
+    --chip-bg: rgba(255, 255, 255, 0.62);
+    --ghost-bg: rgba(255, 255, 255, 0.55);
+    --unit-bg: rgba(238, 243, 250, 0.9);
+    --footer-bg: rgba(250, 252, 255, 0.84);
+    --overlay-bg: rgba(238, 243, 250, 0.97);
+    --card-solid: rgba(255, 255, 255, 0.95);
+    --scrim-rgb: 238, 243, 250;
+    --vignette: rgba(90, 120, 170, 0.14);
+    --grain-opacity: 0.03;
+    --button-bg: #0a6fe0;
+    --display-fill: linear-gradient(105deg, #0f1b2e 30%, #1d4f99 72%, #087a68 105%);
+    --display-glow: rgba(0, 125, 249, 0.16);
+    --outline-fill: linear-gradient(180deg, rgba(29, 79, 153, 0.5), rgba(29, 79, 153, 0.12));
+    --poster:
+      radial-gradient(58rem 30rem at 78% -6%, rgba(43, 228, 198, 0.16), transparent 62%),
+      radial-gradient(46rem 26rem at 18% 4%, rgba(0, 125, 249, 0.12), transparent 64%),
+      radial-gradient(7rem 7rem at 84% 12%, rgba(255, 214, 150, 0.45), transparent 70%),
+      radial-gradient(64rem 44rem at 50% 118%, rgba(0, 125, 249, 0.08), transparent 66%);
+    --mark-dark-display: none;
+    --mark-light-display: block;
+    --icon-sun-display: none;
+    --icon-moon-display: block;
+
+    color-scheme: light;
+  }
+}
+
+:root[data-theme="light"] {
+  --bg: #eef3fa;
+  --ink: #0f1b2e;
+  --muted: #3a4f72;
+  --faint: #56698c;
+  --brand-soft: #0a62c4;
+  --aurora: #087a68;
+  --ember: #a95a00;
+  --line: rgba(20, 50, 100, 0.14);
+  --glass: rgba(255, 255, 255, 0.86);
+  --glass-strong: rgba(250, 252, 255, 0.82);
+  --chip-bg: rgba(255, 255, 255, 0.62);
+  --ghost-bg: rgba(255, 255, 255, 0.55);
+  --unit-bg: rgba(238, 243, 250, 0.9);
+  --footer-bg: rgba(250, 252, 255, 0.84);
+  --overlay-bg: rgba(238, 243, 250, 0.97);
+  --card-solid: rgba(255, 255, 255, 0.95);
+  --scrim-rgb: 238, 243, 250;
+  --vignette: rgba(90, 120, 170, 0.14);
+  --grain-opacity: 0.03;
+  --button-bg: #0a6fe0;
+  --display-fill: linear-gradient(105deg, #0f1b2e 30%, #1d4f99 72%, #087a68 105%);
+  --display-glow: rgba(0, 125, 249, 0.16);
+  --outline-fill: linear-gradient(180deg, rgba(29, 79, 153, 0.5), rgba(29, 79, 153, 0.12));
+  --poster:
+    radial-gradient(58rem 30rem at 78% -6%, rgba(43, 228, 198, 0.16), transparent 62%),
+    radial-gradient(46rem 26rem at 18% 4%, rgba(0, 125, 249, 0.12), transparent 64%),
+    radial-gradient(7rem 7rem at 84% 12%, rgba(255, 214, 150, 0.45), transparent 70%),
+    radial-gradient(64rem 44rem at 50% 118%, rgba(0, 125, 249, 0.08), transparent 66%);
+  --mark-dark-display: none;
+  --mark-light-display: block;
+  --icon-sun-display: none;
+  --icon-moon-display: block;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: 1.72;
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image: var(--poster);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(0, 125, 249, 0.45);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Fixed layers
+   -------------------------------------------------------------------------- */
+
+#world {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+html.world-ready #world {
+  opacity: 1;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 46%, transparent 58%, var(--vignette) 100%);
+}
+
+.progress-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  transform-origin: 0 0;
+  transform: scaleX(0);
+  will-change: transform;
+  background: linear-gradient(90deg, var(--brand), var(--aurora));
+}
+
+main {
+  position: relative;
+  z-index: 10;
+}
+
+/* --------------------------------------------------------------------------
+   A11y helpers
+   -------------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--speed) var(--ease);
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand-soft);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  transition: background-color var(--speed) var(--ease), border-color var(--speed) var(--ease);
+  border-bottom: 1px solid transparent;
+}
+
+.site-header.is-scrolled {
+  background: var(--glass-strong);
+  border-bottom-color: var(--line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0.85rem var(--pad);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: var(--ink);
+  margin-right: auto;
+}
+
+.brand-mark {
+  display: block;
+}
+
+.brand-mark-dark {
+  display: var(--mark-dark-display);
+}
+
+.brand-mark-light {
+  display: var(--mark-light-display);
+}
+
+.brand span {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.brand small {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  color: var(--muted);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.6rem;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: var(--t-small);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color var(--speed) var(--ease);
+}
+
+.nav-links a:hover,
+.nav-links a.is-active {
+  color: var(--ink);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  padding: 0.45rem 0.9rem;
+  text-decoration: none;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color var(--speed) var(--ease), background-color var(--speed) var(--ease);
+}
+
+.lang-switch:hover {
+  border-color: var(--brand-soft);
+  background: rgba(0, 125, 249, 0.12);
+}
+
+/* Shows the theme it switches to: a sun in the dark, a moon in the light. */
+.theme-switch {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color var(--speed) var(--ease), background-color var(--speed) var(--ease);
+}
+
+.theme-switch:hover {
+  border-color: var(--brand-soft);
+  background: rgba(0, 125, 249, 0.12);
+}
+
+.theme-switch svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-switch .icon-sun {
+  display: var(--icon-sun-display);
+}
+
+.theme-switch .icon-moon {
+  display: var(--icon-moon-display);
+}
+
+.nav-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-toggle-lines,
+.nav-toggle-lines::before,
+.nav-toggle-lines::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform var(--speed) var(--ease), opacity var(--speed) var(--ease);
+}
+
+.nav-toggle-lines {
+  top: 50%;
+  margin-top: -1px;
+}
+
+.nav-toggle-lines::before {
+  left: 0;
+  right: 0;
+  transform: translateY(-7px);
+}
+
+.nav-toggle-lines::after {
+  left: 0;
+  right: 0;
+  transform: translateY(7px);
+}
+
+body.menu-open .nav-toggle-lines {
+  background: transparent;
+}
+
+body.menu-open .nav-toggle-lines::before {
+  transform: rotate(45deg);
+}
+
+body.menu-open .nav-toggle-lines::after {
+  transform: rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   Chapter rail + world caption
+   -------------------------------------------------------------------------- */
+
+.rail {
+  position: fixed;
+  right: clamp(1rem, 2.4vw, 2.2rem);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+}
+
+.rail a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.35rem 0;
+  text-decoration: none;
+  color: var(--faint);
+  transition: color var(--speed) var(--ease);
+}
+
+.rail a i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  width: 1.7rem;
+  text-align: right;
+  transition: color var(--speed) var(--ease);
+}
+
+/* Taken out of flow: in-flow labels reserved their width even while hidden,
+   which pushed the rail into the content column on mid-size desktops. */
+.rail a span {
+  position: absolute;
+  right: 2.4rem;
+  top: 50%;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) translateX(6px);
+  transition: opacity var(--speed) var(--ease), transform var(--speed) var(--ease);
+}
+
+.rail a:hover span,
+.rail a:focus-visible span {
+  opacity: 1;
+  transform: translateY(-50%);
+}
+
+.rail a.is-active {
+  color: var(--ink);
+}
+
+.rail a.is-active i {
+  color: var(--aurora);
+}
+
+/* --------------------------------------------------------------------------
+   Chapters — shared layout
+   -------------------------------------------------------------------------- */
+
+.chapter {
+  position: relative;
+  padding: clamp(9rem, 22vh, 15rem) 0;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+.copy {
+  max-width: 37rem;
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.copy-right {
+  margin-left: auto;
+}
+
+.copy-center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.tag {
+  margin: 0 0 1.1rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--aurora);
+}
+
+.tag::before {
+  content: attr(data-num) " — ";
+  color: var(--faint);
+}
+
+h2 {
+  margin: 0 0 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-h2);
+  line-height: 1.16;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 0;
+  font-size: var(--t-lead);
+  color: var(--muted);
+}
+
+h3 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-h3);
+  letter-spacing: 0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease),
+    background-color var(--speed) var(--ease), border-color var(--speed) var(--ease);
+}
+
+.button-primary {
+  background: var(--button-bg);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(74, 168, 255, 0.35) inset, 0 10px 34px rgba(0, 125, 249, 0.35);
+}
+
+.button-primary:hover {
+  background: #1f8dfc;
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(74, 168, 255, 0.5) inset, 0 14px 40px rgba(0, 125, 249, 0.45);
+}
+
+.button-ghost {
+  color: var(--ink);
+  border: 1px solid var(--line);
+  background: var(--ghost-bg);
+}
+
+.button-ghost:hover {
+  border-color: var(--brand-soft);
+  background: rgba(0, 125, 249, 0.14);
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   00 · Hero
+   -------------------------------------------------------------------------- */
+
+.chapter-hero {
+  min-height: 165vh;
+  padding-top: clamp(7.5rem, 16vh, 11rem);
+}
+
+.hero-inner {
+  min-height: calc(100vh - clamp(7.5rem, 16vh, 11rem));
+  min-height: calc(100svh - clamp(7.5rem, 16vh, 11rem));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Keeps the countdown clear of the fixed world caption on short viewports. */
+  padding-bottom: 5rem;
+}
+
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.6rem;
+}
+
+.eyebrow span {
+  font-family: var(--font-mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.42rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--chip-bg);
+}
+
+.hero-display {
+  font-family: var(--font-display);
+  line-height: 0.98;
+  margin-bottom: 1.7rem;
+  user-select: none;
+}
+
+.hero-display span {
+  display: block;
+}
+
+.hd-solid {
+  font-size: var(--t-display);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  background: var(--display-fill);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 6px 40px var(--display-glow));
+}
+
+/* Filled, not stroked: the display font's contours overlap, so -webkit-text-stroke
+   traces every internal seam. A fill hides them (nonzero winding). */
+.hd-outline {
+  font-size: calc(var(--t-display) * 0.72);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: var(--outline-fill);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-copy {
+  max-width: 33rem;
+  font-size: var(--t-lead);
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-bottom: 2.6rem;
+}
+
+/* Live status lives in the chip row rather than as its own line of copy. */
+.chip-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-color: rgba(43, 228, 198, 0.4);
+  color: var(--aurora);
+}
+
+.chip-live b {
+  font-weight: 500;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--aurora);
+  box-shadow: 0 0 12px var(--aurora);
+  flex: none;
+}
+
+/* Countdown */
+
+.live-countdown {
+  max-width: 30rem;
+  padding: 1.15rem 1.4rem 1.3rem;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.countdown-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.countdown-heading span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.countdown-heading i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  box-shadow: 0 0 10px var(--brand-soft);
+}
+
+.countdown-heading b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.countdown-heading time {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--faint);
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.countdown-unit {
+  text-align: center;
+  padding: 0.55rem 0.25rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--unit-bg);
+}
+
+.countdown-unit strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.countdown-unit span {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.countdown-seconds strong {
+  color: var(--brand-soft);
+}
+
+.live-countdown.is-live .countdown-heading i {
+  background: var(--ember);
+  box-shadow: 0 0 10px var(--ember);
+}
+
+/* After the day there is nothing left to count. */
+.live-countdown.is-ended .countdown-grid {
+  display: none;
+}
+
+.live-countdown.is-ended .countdown-heading {
+  margin-bottom: 0;
+}
+
+/* The CET schedule restated in the visitor's own zone. */
+.local-time {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.faq-list .local-time {
+  margin: -0.4rem 1.3rem 1.15rem;
+  padding: 0;
+}
+
+/* Status chip follows the phase: teal while the CFP is open, ember when live. */
+html[data-phase="live"] .chip-live {
+  border-color: rgba(255, 180, 84, 0.5);
+  color: var(--ember);
+}
+
+html[data-phase="live"] .chip-live .status-dot {
+  background: var(--ember);
+  box-shadow: 0 0 12px var(--ember);
+}
+
+html[data-phase="ended"] .chip-live {
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+html[data-phase="ended"] .chip-live .status-dot {
+  background: var(--faint);
+  box-shadow: none;
+}
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100vh - 4.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.scroll-cue {
+  transition: opacity 400ms var(--ease);
+}
+
+.scroll-cue i {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(180deg, var(--brand-soft), transparent);
+}
+
+html.js .scroll-cue i {
+  animation: cue 2.2s var(--ease) infinite;
+}
+
+/* The cue has done its job after the first scroll — stop looping forever. */
+html.scrolled .scroll-cue {
+  opacity: 0;
+}
+
+html.scrolled .scroll-cue i {
+  animation: none;
+}
+
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   01 · CFP
+   -------------------------------------------------------------------------- */
+
+#cfp {
+  min-height: 235vh;
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin: clamp(4rem, 12vh, 7rem) 0;
+}
+
+.topic-card {
+  padding: 1.5rem 1.4rem 1.55rem;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: transform var(--speed) var(--ease), border-color var(--speed) var(--ease),
+    background-color var(--speed) var(--ease);
+}
+
+.topic-card:hover,
+.topic-card.is-lit {
+  transform: translateY(-3px);
+  border-color: rgba(74, 168, 255, 0.45);
+  background: rgba(0, 125, 249, 0.1);
+}
+
+.topic-card span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--brand-soft);
+  margin-bottom: 1.9rem;
+}
+
+.topic-card p {
+  color: var(--muted);
+  font-size: var(--t-small);
+  line-height: 1.6;
+}
+
+.cfp-panel {
+  max-width: 37rem;
+  padding: clamp(1.6rem, 3vw, 2.2rem);
+  background: var(--glass);
+  border: 1px solid rgba(43, 228, 198, 0.28);
+  border-radius: var(--radius);
+}
+
+.panel-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aurora);
+  margin-bottom: 0.9rem;
+}
+
+.cfp-panel > p:not(.panel-status) {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+html:not([data-phase="cfp"]) .cfp-panel .panel-status {
+  color: var(--muted);
+}
+
+html:not([data-phase="cfp"]) .cfp-panel .status-dot {
+  background: var(--faint);
+  box-shadow: none;
+}
+
+/* Key dates: a three-stop line; the next milestone glows, past ones dim. */
+.key-dates {
+  list-style: none;
+  margin: 0 0 1.7rem;
+  padding: 1.1rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.key-dates li {
+  position: relative;
+  padding-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.key-dates li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--brand-soft);
+}
+
+.key-dates time,
+.key-dates b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-label);
+  letter-spacing: 0.08em;
+  color: var(--brand-soft);
+}
+
+.key-dates span {
+  font-size: var(--t-small);
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.key-dates li.is-current::before {
+  background: var(--aurora);
+  border-color: var(--aurora);
+  box-shadow: 0 0 10px var(--aurora);
+}
+
+.key-dates li.is-current time,
+.key-dates li.is-current b {
+  color: var(--aurora);
+}
+
+.key-dates li.is-done {
+  opacity: 0.55;
+}
+
+.key-dates li.is-done::before {
+  background: var(--faint);
+  border-color: var(--faint);
+}
+
+.cfp-panel > .panel-note {
+  margin: 1.1rem 0 0;
+  font-size: var(--t-small);
+}
+
+.panel-note a,
+.faq-list .faq-link a {
+  color: var(--brand-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   02 · Formato
+   -------------------------------------------------------------------------- */
+
+#format {
+  min-height: 210vh;
+}
+
+.steps {
+  margin-top: clamp(4rem, 12vh, 7rem);
+  max-width: 34rem;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.step {
+  display: flex;
+  gap: 1.1rem;
+  padding: 1.3rem 1.4rem;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.step span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--brand-soft);
+  padding-top: 0.35rem;
+}
+
+.step p {
+  color: var(--muted);
+  font-size: var(--t-small);
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   03 · Programa
+   -------------------------------------------------------------------------- */
+
+#program {
+  min-height: 210vh;
+}
+
+.schedule {
+  list-style: none;
+  margin: clamp(4rem, 12vh, 7rem) 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+}
+
+.schedule-card {
+  position: relative;
+  padding: 1.6rem 1.4rem;
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.schedule-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--brand), transparent);
+}
+
+.schedule-card.is-pause::before {
+  background: linear-gradient(90deg, var(--ember), transparent);
+}
+
+.schedule-time {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--brand-soft);
+  margin-bottom: 1.4rem;
+}
+
+.schedule-card.is-pause .schedule-time {
+  color: var(--ember);
+}
+
+.schedule-card p {
+  color: var(--muted);
+  font-size: var(--t-small);
+  line-height: 1.6;
+}
+
+@media (min-width: 861px) {
+  #program .schedule {
+    grid-template-columns: 1fr;
+    max-width: 37rem;
+    gap: 0.7rem;
+  }
+
+  #program .schedule-card {
+    display: grid;
+    grid-template-columns: 8.2rem 1fr;
+    column-gap: 1.2rem;
+    align-items: baseline;
+    padding: 1.2rem 1.4rem;
+  }
+
+  #program .schedule-time {
+    grid-row: span 2;
+    margin-bottom: 0;
+  }
+
+  #program .schedule-card h3 {
+    margin: 0 0 0.3rem;
+  }
+
+  #program .schedule-card p {
+    grid-column: 2;
+    margin: 0;
+  }
+
+  #program .rhythm-band {
+    max-width: 37rem;
+  }
+}
+
+.rhythm-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 1.4rem clamp(1.4rem, 3vw, 2.2rem);
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.rhythm-band h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.rhythm-band > div {
+  display: flex;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.rhythm-band strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.rhythm-band small {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* --------------------------------------------------------------------------
+   04 · Comunidad
+   -------------------------------------------------------------------------- */
+
+.chapter-community {
+  min-height: 150vh;
+  display: flex;
+  align-items: center;
+}
+
+.chapter-community .wrap {
+  width: 100%;
+}
+
+.copy-center .lead {
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   05 · Info + footer
+   -------------------------------------------------------------------------- */
+
+.chapter-faq {
+  min-height: 100vh;
+  padding-bottom: 0;
+}
+
+.faq-list {
+  max-width: 44rem;
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.faq-list details {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: border-color var(--speed) var(--ease);
+}
+
+.faq-list details[open] {
+  border-color: rgba(74, 168, 255, 0.4);
+}
+
+.faq-list summary {
+  padding: 1.05rem 1.3rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.98rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-list summary::after {
+  content: "+";
+  font-family: var(--font-mono);
+  color: var(--brand-soft);
+  transition: transform var(--speed) var(--ease);
+}
+
+.faq-list details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq-list details p {
+  padding: 0 1.3rem 1.15rem;
+  color: var(--muted);
+  font-size: var(--t-small);
+  line-height: 1.65;
+}
+
+.faq-list details .faq-link {
+  margin-top: -0.6rem;
+}
+
+.closing {
+  margin: clamp(5rem, 14vh, 8rem) 0;
+  text-align: center;
+}
+
+.closing-line {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+  color: var(--ink);
+  margin-bottom: 1.8rem;
+  letter-spacing: 0.01em;
+}
+
+.site-footer {
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid var(--line);
+  background: var(--footer-bg);
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.4rem;
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: var(--t-small);
+  transition: color var(--speed) var(--ease);
+}
+
+.footer-links a:hover {
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
+   Reveals (JS-gated so no-JS stays fully readable)
+   -------------------------------------------------------------------------- */
+
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 520ms var(--ease), transform 520ms var(--ease);
+}
+
+html.js [data-reveal].is-visible,
+html.js [data-reveal]:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+/* Once revealed, hoverable cards go back to snappy 240ms transitions. */
+html.js .topic-card[data-reveal].is-visible {
+  transition: opacity 520ms var(--ease), transform var(--speed) var(--ease),
+    border-color var(--speed) var(--ease), background-color var(--speed) var(--ease);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+/* Below this the centred content column reaches the rail, so the rail goes. */
+@media (max-width: 1240px) {
+  .rail {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    background: var(--overlay-bg);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--speed) var(--ease), visibility 0s linear var(--speed);
+  }
+
+  .nav-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+    pointer-events: auto;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .nav-links a {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--ink);
+    padding: 0.4rem 1rem;
+  }
+
+  .key-dates {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .key-dates li {
+    padding: 0 0 0 1.4rem;
+  }
+
+  .key-dates li::before {
+    top: 0.3rem;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .chapter {
+    padding: clamp(6rem, 14vh, 9rem) 0;
+  }
+
+  .chapter-hero,
+  #cfp,
+  #format,
+  #program {
+    min-height: 0;
+  }
+
+  /* The one chapter whose subject is the sky: arriving shows DOTNET over open
+     sky and the card follows from below (world.js frames the word above it). */
+  .chapter-community {
+    min-height: 118svh;
+    align-items: flex-end;
+  }
+
+  /* Cards go near-opaque on mobile so the world behind them can never eat
+     the contrast. */
+  .copy,
+  .topic-card,
+  .step,
+  .schedule-card,
+  .rhythm-band,
+  .cfp-panel,
+  .faq-list details {
+    background: var(--card-solid);
+  }
+
+  .topic-grid,
+  .schedule {
+    grid-template-columns: 1fr;
+    margin-block: 3.5rem;
+  }
+
+  .steps {
+    margin-top: 3.5rem;
+    max-width: none;
+  }
+
+  .hd-outline {
+    letter-spacing: 0.04em;
+  }
+
+  /* The world sits directly behind the hero copy at this width, so an authored
+     scrim protects the text instead of dimming the whole scene. */
+  .chapter-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      rgba(var(--scrim-rgb), 0.86) 0%,
+      rgba(var(--scrim-rgb), 0.6) 58%,
+      rgba(var(--scrim-rgb), 0) 100%
+    );
+  }
+
+  .scroll-cue {
+    display: none;
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1040px) {
+  .topic-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion / no WebGL
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .scroll-cue i {
+    animation: none !important;
+  }
+
+  #world {
+    transition: none;
+  }
+}
+
+html.no-webgl #world {
+  display: none;
+}
+
+html.no-webgl .chapter-hero,
+html.no-webgl #cfp,
+html.no-webgl #format,
+html.no-webgl #program,
+html.no-webgl .chapter-community {
+  min-height: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Document pages (Code of Conduct): no 3D world, the poster is the backdrop.
+   -------------------------------------------------------------------------- */
+
+.doc-page main {
+  padding: clamp(7rem, 16vh, 10rem) 0 clamp(4rem, 10vh, 6rem);
+}
+
+.doc {
+  max-width: 50rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.doc-card {
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.doc h1 {
+  margin: 0 0 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-h2);
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+.doc h2 {
+  margin: 0 0 0.8rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.doc-card p,
+.doc-list li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.doc-card p + p {
+  margin-top: 0.8rem;
+}
+
+.doc-card p:last-child {
+  margin-bottom: 0;
+}
+
+.doc-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.doc-list li::marker {
+  color: var(--brand-soft);
+}
+
+.doc-list-avoid li::marker {
+  color: var(--ember);
+}
+
+.doc-report {
+  border-color: rgba(43, 228, 198, 0.34);
+}
+
+.doc-mail a {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--aurora);
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+
+.doc-back {
+  margin: 0.8rem 0 0;
+}
+
+.tag-plain::before {
+  content: none;
+}

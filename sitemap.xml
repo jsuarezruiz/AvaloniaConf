@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://jsuarezruiz.github.io/AvaloniaConf/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jsuarezruiz.github.io/AvaloniaConf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jsuarezruiz.github.io/AvaloniaConf/en/"/>
+  </url>
+  <url>
+    <loc>https://jsuarezruiz.github.io/AvaloniaConf/en/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jsuarezruiz.github.io/AvaloniaConf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jsuarezruiz.github.io/AvaloniaConf/en/"/>
+  </url>
+  <url>
+    <loc>https://jsuarezruiz.github.io/AvaloniaConf/conduct.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jsuarezruiz.github.io/AvaloniaConf/conduct.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jsuarezruiz.github.io/AvaloniaConf/en/conduct.html"/>
+  </url>
+  <url>
+    <loc>https://jsuarezruiz.github.io/AvaloniaConf/en/conduct.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jsuarezruiz.github.io/AvaloniaConf/conduct.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jsuarezruiz.github.io/AvaloniaConf/en/conduct.html"/>
+  </url>
+</urlset>

@@ -1,0 +1,23 @@
+# Cache rules for hosts that read a _headers file (Netlify, Cloudflare Pages).
+# GitHub Pages ignores it (fixed 10-minute caching); there the ?v=<hash> on
+# scripts and styles, and the hashed vendor bundle, keep deploys consistent.
+#
+# Pages, scripts and styles change between deploys without changing their
+# names, so browsers must revalidate them every time (a cheap 304 when
+# unchanged). Without this, Safari caches ES modules heuristically and keeps
+# running an old world.js after a deploy.
+/*
+  Cache-Control: no-cache
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Never edited in place: rebuilding three.js or swapping a font should come
+# with a new file name, so these can be cached for a year.
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Calendar files download with the right type and a stable name.
+/*.ics
+  Content-Type: text/calendar; charset=utf-8
