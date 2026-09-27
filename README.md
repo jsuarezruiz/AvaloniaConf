@@ -1,6 +1,8 @@
 # Avalonia Conf Online 2026
 
-Website for Avalonia Conf Online 2026, a free online conference about Avalonia UI and .NET.
+Website for Avalonia Conf Online 2026, a free online **community conference** about Avalonia UI and .NET.
+
+It is made by and for the Avalonia community: the talks come from people building real applications with Avalonia, chosen through an open Call for Papers, and anyone can watch for free.
 
 **Live site:** https://jsuarezruiz.github.io/AvaloniaConf/ ([English](https://jsuarezruiz.github.io/AvaloniaConf/en/))
 
