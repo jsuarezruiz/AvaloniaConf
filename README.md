@@ -1,5 +1,7 @@
 # Avalonia Conf Online 2026
 
+![Avalonia Conf Online 2026, December 2, 2026, free and online](assets/social-card.jpg)
+
 Website for Avalonia Conf Online 2026, a free online **community conference** about Avalonia.
 
 The talks come from people building real applications with Avalonia, chosen through an open Call for Papers, and anyone can watch for free.
