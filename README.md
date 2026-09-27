@@ -4,7 +4,7 @@ Website for Avalonia Conf Online 2026, a free online **community conference** ab
 
 The talks come from people building real applications with Avalonia, chosen through an open Call for Papers, and anyone can watch for free.
 
-**Live site:** https://jsuarezruiz.github.io/AvaloniaConf/ ([English](https://jsuarezruiz.github.io/AvaloniaConf/en/))
+**Live site:** https://jsuarezruiz.github.io/AvaloniaConf/
 
 | | |
 | --- | --- |
